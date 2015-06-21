@@ -8,10 +8,10 @@
 struct Rectangle {
     int id;
 
-    double center_x;
-    double center_y;
-    double width;
-    double height;
+    int center_x;
+    int center_y;
+    int width;
+    int height;
 };
 
 #endif //CORNERBLOCKLIST_SQUARE_H
