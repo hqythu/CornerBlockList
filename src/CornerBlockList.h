@@ -27,7 +27,7 @@ class CornerBlockList {
 public:
     CornerBlockList();
 
-    // TODO: show the CBL in GUI
+    // show the CBL in GUI
     void show();
 
     // TODO: using Simulated Annealing Algorithm to optimize the CBL
@@ -37,7 +37,7 @@ public:
     // Considering both the weighted sum of the area
     // and the total Manhattan wirelength with a
     // parameter between 0 and 1.
-    void Assess(double parameter);
+    void assess(double parameter);
 
 };
 

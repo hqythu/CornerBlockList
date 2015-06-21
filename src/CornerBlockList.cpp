@@ -3,3 +3,18 @@
 //
 
 #include "CornerBlockList.h"
+
+// TODO
+CornerBlockList::CornerBlockList() { }
+
+void show() {
+
+}
+
+void optimize() {
+
+}
+
+void assess(double parameter) {
+
+}
