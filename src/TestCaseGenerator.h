@@ -7,18 +7,18 @@
 
 namespace test {
 
-    class TestCaseGenerator {
-    private:
-        static TestCaseGenerator* generator_;
-        TestCaseGenerator() {};
-        TestCaseGenerator(TestCaseGenerator&) {};
-        TestCaseGenerator* operator = (TestCaseGenerator) { return generator_; }
-    public:
-        static TestCaseGenerator* Instance();
-        void generate(int cnt);
-    };
+class TestCaseGenerator {
+private:
+    static TestCaseGenerator* generator_;
+    TestCaseGenerator() {};
+    TestCaseGenerator(TestCaseGenerator&) {};
+    TestCaseGenerator* operator = (TestCaseGenerator) { return generator_; }
+public:
+    static TestCaseGenerator* Instance();
+    void generate(int cnt);
+};
 
-}
+}  // test
 
 
 #endif //CORNERBLOCKLIST_TESTCASEGENERATOR_H
