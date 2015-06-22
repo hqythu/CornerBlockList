@@ -11,8 +11,8 @@ namespace test {
     private:
         static TestCaseGenerator* generator_;
         TestCaseGenerator() {};
-        TestCaseGenerator(TestCaseGenerator&) {};
-        TestCaseGenerator* operator = (TestCaseGenerator) { return generator_; }
+        TestCaseGenerator(const TestCaseGenerator&) {};
+        TestCaseGenerator& operator = (const TestCaseGenerator&) { return *generator_; }
     public:
         static TestCaseGenerator* Instance();
         void generate(int cnt);

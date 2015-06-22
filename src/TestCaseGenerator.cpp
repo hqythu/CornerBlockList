@@ -22,7 +22,7 @@ bool pred(const std::pair<int, int>& p1, const std::pair<int, int>& p2) {
 
 namespace test {
 
-    TestCaseGenerator* TestCaseGenerator::generator_ = 0;
+    TestCaseGenerator* TestCaseGenerator::generator_ = nullptr;
 
     TestCaseGenerator* TestCaseGenerator::Instance() {
         if (generator_ == 0)
