@@ -6,9 +6,11 @@
 #define CORNERBLOCKLIST_CORDERBLOCKLIST_H
 #include "Rectangle.h"
 #include <vector>
+#include <string>
+#include <utility>
 
 class CornerBlockList {
-    std::vector<Rectangle> squres;
+    std::vector<Rectangle> rectangles;
 
     // Mr. Yao uses letter to present every block and
     // I think block id will be better.
@@ -24,8 +26,11 @@ class CornerBlockList {
     std::vector<int> HStack;
     std::vector<int> VStack;
 
+    // pairs
+    std::vector< std::pair<int, int> > pairs;
 public:
     CornerBlockList();
+    CornerBlockList(const std::string& file_name);
 
     // show the CBL in GUI
     void show();

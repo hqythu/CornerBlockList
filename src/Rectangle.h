@@ -12,6 +12,8 @@ struct Rectangle {
     int center_y;
     int width;
     int height;
+    Rectangle() {}
+    Rectangle(int i, int w, int h) : id(i), center_x(0), center_y(0), width(w), height(h) {}
 };
 
 #endif //CORNERBLOCKLIST_SQUARE_H

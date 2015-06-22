@@ -4,6 +4,12 @@
 
 #ifndef CORNERBLOCKLIST_COMMON_H
 #define CORNERBLOCKLIST_COMMON_H
+#include <string>
+
+const std::string FILE_NAME_PREFIX = "../test/data_in_";
+const std::string FILE_NAME_SUFFIX = ".txt";
+
+const int TEST_FILE_NUM = 5;
 
 const int RECTANGLE_NUM_MAX = 500;
 const int RECTANGLE_NUM_MIN = 50;
