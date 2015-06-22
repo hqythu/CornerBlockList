@@ -3,6 +3,7 @@
 //
 
 #include "CornerBlockList.h"
+#include "common.h"
 #include <iostream>
 #include <fstream>
 
@@ -58,10 +59,10 @@ void CornerBlockList::show() {
     }
 }
 
-void optimize() {
+void CornerBlockList::optimize() {
 
 }
 
-void assess() {
+void CornerBlockList::assess() {
 
 }
