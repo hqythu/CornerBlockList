@@ -62,6 +62,6 @@ void optimize() {
 
 }
 
-void assess(double parameter) {
+void assess() {
 
 }

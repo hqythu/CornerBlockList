@@ -43,7 +43,7 @@ public:
     // Considering both the weighted sum of the area
     // and the total Manhattan wirelength with a
     // parameter between 0 and 1.
-    void assess(double parameter);
+    void assess();
 
 };
 

@@ -22,5 +22,7 @@ const int RECTANGLE_HEIGHT_MIN = 10;
 
 const int PAIR_NUM = 250;
 
+// a parameter between 0 and 1 to decide the optimization
+const double PARAMETER = 0.5;
 
 #endif //CORNERBLOCKLIST_COMMON_H
