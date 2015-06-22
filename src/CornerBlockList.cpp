@@ -6,6 +6,15 @@
 #include "common.h"
 #include <iostream>
 #include <fstream>
+#include <cmath>
+
+namespace {
+
+inline int manhattan(int x1, int x2, int y1, int y2) {
+    return std::abs(x1 - x2) + std::abs(y1 - y2);
+}
+
+}
 
 CornerBlockList::CornerBlockList() {}
 
@@ -66,3 +75,4 @@ void CornerBlockList::optimize() {
 void CornerBlockList::assess() {
 
 }
+
