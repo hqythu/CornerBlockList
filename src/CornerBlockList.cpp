@@ -43,6 +43,8 @@ CornerBlockList::CornerBlockList(const std::string& file_name) {
         fin >> rec1_id >> rec2_id;
         pairs.push_back(std::make_pair(rec1_id, rec2_id));
     }
+
+    fin.close();
 }
 
 void CornerBlockList::show() {

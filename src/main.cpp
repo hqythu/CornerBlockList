@@ -9,7 +9,7 @@
 using namespace std;
 
 int main() {
-    test::TestCaseGenerator* generator = test::TestCaseGenerator::Instance();
+    test::TestCaseGenerator *generator = test::TestCaseGenerator::Instance();
 
     generator -> generate(TEST_FILE_NUM);
 
