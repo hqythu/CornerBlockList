@@ -3,29 +3,16 @@
 //
 
 #include "TestCaseGenerator.h"
+#include "common.h"
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <utility>
 #include <algorithm>
 #include <cstdlib>
 #include <ctime>
 
-
 namespace test {
-
-    const int RECTANGLE_NUM_MAX = 500;
-    // WARNING: The implementation of random pair generator
-    // has some bug so RECTANGLE_NUM_MIN should not be less
-    // than PAIR_NUM;
-    const int RECTANGLE_NUM_MIN = 300;
-
-    const int RECTANGLE_WIDTH_MAX = 30;
-    const int RECTANGLE_WIDTH_MIN = 10;
-
-    const int RECTANGLE_HEIGHT_MAX = 30;
-    const int RECTANGLE_HEIGHT_MIN = 10;
-
-    const int PAIR_NUM = 250;
 
     TestCaseGenerator* TestCaseGenerator::generator_ = 0;
 
@@ -47,7 +34,8 @@ namespace test {
             int n = RECTANGLE_NUM_MIN + std::rand() % (RECTANGLE_NUM_MAX - RECTANGLE_NUM_MIN);
 
             if (fout.is_open()) {
-                // write random rectangles
+                // write random rectangles parameters
+                fout << n << std::endl;
                 std::clog << "Writing data_in_" << i << ".txt" << std::endl;
                 for (int j = 0; j < n; j++) {
                     int width = RECTANGLE_WIDTH_MIN     + std::rand() % (RECTANGLE_WIDTH_MAX - RECTANGLE_WIDTH_MIN);
@@ -55,17 +43,27 @@ namespace test {
                     fout << width << ' ' << height << std::endl;
                 }
 
-                // rectangle ending tag
+                // rectangle  ending tag
                 fout << "0 0" << std::endl;
 
                 // make random pairs
                 // TODO: The random pairs generator may has a better implementation
-                std::vector <int> rectangle_ids;
-                for (int j = 1; j <= n; j++)
-                    rectangle_ids.push_back(j);
-                std::random_shuffle(rectangle_ids.begin(), rectangle_ids.end());
-                for (int j = 0; j < PAIR_NUM; j++)
-                    fout << rectangle_ids[j] << ' ' << rectangle_ids[j + 1] << std::endl;
+
+                std::vector < std::pair<int, int> > pairs;
+
+                // make double pairs to ensure enough unique pairs.
+                for (int j = 0; j < 2 * PAIR_NUM; j++)
+                    pairs.push_back(std::make_pair(std::rand() % n + 1, std::rand() % n + 1));
+
+                // unuique
+                pairs.erase(std::unique(pairs.begin(), pairs.end()), pairs.end());
+
+                // print
+                int count = 0;
+                for (auto pair : pairs) {
+                    if (count++ < PAIR_NUM && pair.first != pair.second)
+                        fout << pair.first << ' ' << pair.second << std::endl;
+                }
             }
             else {
                 std::cerr << "ERROR: FILE NOT OPEN!" << std::endl;
