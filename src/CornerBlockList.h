@@ -4,6 +4,7 @@
 
 #ifndef CORNERBLOCKLIST_CORDERBLOCKLIST_H
 #define CORNERBLOCKLIST_CORDERBLOCKLIST_H
+
 #include "Rectangle.h"
 #include <vector>
 

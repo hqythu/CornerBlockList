@@ -7,16 +7,21 @@
 
 namespace test {
 
-    class TestCaseGenerator {
-    private:
-        static TestCaseGenerator* generator_;
-        TestCaseGenerator() {};
-        TestCaseGenerator(const TestCaseGenerator&) {};
-        TestCaseGenerator& operator = (const TestCaseGenerator&) { return *generator_; }
-    public:
-        static TestCaseGenerator* Instance();
-        void generate(int cnt);
-    };
+class TestCaseGenerator {
+private:
+    static TestCaseGenerator *generator_;
+
+    TestCaseGenerator() { };
+
+    TestCaseGenerator(const TestCaseGenerator &) { };
+
+    TestCaseGenerator &operator=(const TestCaseGenerator &) { return *generator_; }
+
+public:
+    static TestCaseGenerator *Instance();
+
+    void generate(int cnt);
+};
 
 }
 
