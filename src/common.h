@@ -1,0 +1,8 @@
+//
+// Created by ZhuangTianYi on 15/6/22.
+//
+
+#ifndef CORNERBLOCKLIST_COMMON_H
+#define CORNERBLOCKLIST_COMMON_H
+
+#endif //CORNERBLOCKLIST_COMMON_H
