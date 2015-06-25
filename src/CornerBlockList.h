@@ -16,10 +16,10 @@ class CornerBlockList {
 
     // Mr. Yao uses letter to present every block and
     // I think block id will be better.
-    std::vector<int> block_id;
+    std::vector<int> block_ids;
 
     // 0 for horizontal and 1 for vertical
-    std::vector<bool> orientation;
+    std::vector<bool> orientations;
 
     // 0 presents 1 and 10 presents 2, details in PPT
     std::vector<bool> uncover_rec_num;

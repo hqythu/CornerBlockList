@@ -7,6 +7,8 @@
 #include <iostream>
 #include <fstream>
 #include <cmath>
+#include <cstdlib>
+#include <ctime>
 
 namespace {
 
@@ -48,13 +50,29 @@ CornerBlockList::CornerBlockList(const std::string& file_name) {
             std::cerr << "ERRPR: input data error.";
     }
 
-    for (int i = 0; i < n; i++) {
+    for (int i = 0; i < PAIR_NUM; i++) {
         int rec1_id, rec2_id;
         fin >> rec1_id >> rec2_id;
         pairs.push_back(std::make_pair(rec1_id, rec2_id));
     }
 
     fin.close();
+
+    block_ids.clear();
+    orientations.clear();
+
+    std::srand(std::time(nullptr));
+
+    for (int i = 0; i < n; i++) {
+        block_ids.push_back(rectangles[i].id);
+        std::random_shuffle(block_ids.begin(), block_ids.end());
+
+        orientations.push_back(std::rand() % 2);
+        uncover_rec_num.push_back(0);
+        if (!(std::rand() % 3)) {
+            uncover_rec_num.push_back(1);
+        }
+    }
 }
 
 void CornerBlockList::show() {
@@ -66,6 +84,15 @@ void CornerBlockList::show() {
     for (auto pair : pairs) {
         std::cout << pair.first << ' ' << pair.second << std::endl;
     }
+
+    for (auto block_id : block_ids) {
+        std::cout<< block_id << ' ';
+    }
+
+    std::cout << std::endl;
+
+    std::cout << uncover_rec_num.size() << std::endl;
+
 }
 
 void CornerBlockList::optimize() {
