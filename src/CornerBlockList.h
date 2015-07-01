@@ -31,6 +31,7 @@ class CornerBlockList {
     Content* RandomChange(const Content* c,int Re);
     bool build(const Content* c);
     void cal_longest(Node* start);
+    void kill();
 public:
     CornerBlockList();
     CornerBlockList(const std::string& file_name);

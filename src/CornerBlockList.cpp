@@ -69,18 +69,10 @@ CornerBlockList::CornerBlockList(const std::string& file_name) {
     std::random_shuffle(con->block_ids.begin(),con->block_ids.end());
     for (int i = 1; i < block_num; i++)
       con->orientations.push_back(rand()%2);
-    int ones = 0;
-    for (int i = 1;i < block_num; i++) {
-      int x = rand()%(i - ones + 1);
-      for (int j = 0;j < x;j++)
-        con->uncover_rec_num.push_back(1);
+
+    for (int i = 1;i < block_num; i++) 
       con->uncover_rec_num.push_back(0);
-    }
     
-    E = new Node();
-    W = new Node();
-    S = new Node();
-    N = new Node();
 }
 
 void CornerBlockList::show() {
@@ -89,14 +81,29 @@ void CornerBlockList::show() {
 }
 
 void CornerBlockList::optimize() {
-
-  
+  double temp = ini_temp;
+  double now = assess(con);
+  while (temp > goal_temp) {
+    for (int i = 1;i <= every;i++) {
+      Content* tmp = RandomChange(con);
+      double next = assess(tmp);
+      if ((next>0)&&((next < now)||((rand()%1000)/1000 < exp(-dy/temp)))) {
+        delete con;
+        con = tmp;
+      } else {
+        delete tmp;
+      }
+    }
+  }
 }
 
 bool CornerBlockList::build(const Content* con) {
   HStack.clear();
   VStack.clear();
-  S->ini(); N->ini(); W->ini(); E->ini();
+  E = new Node();
+  W = new Node();
+  S = new Node();
+  N = new Node();
   
   for (int i = 0;i < block_num;i++) {
     rectangles[i].GET_V()->SetLen(rectangles[i].GET_HEIGHT(con->ifrotate[i]));
@@ -215,62 +222,78 @@ void CornerBlockList::cal_longest(Node* start) {
   }
 }
 
+void CornerBlockList::kill() {
+  for (int i = 0;i < block_num;i++) {
+    Node* nd = rectangles[i].GET_H()->GET_S();
+    if (nd) delete nd;
+    nd = rectangles[i].GET_H()->GET_T();
+    if (nd) delete nd;
+    nd = rectangles[i].GET_V()->GET_S();
+    if (nd) delete nd;
+    nd = rectangles[i].GET_V()->GET_T();
+    if (nd) delete nd;
+  }
+}
 double CornerBlockList::assess(const Content* c) {
   double q = build(c);
   //Check
-  if (!q) return -1;
-  cal_longest(S);
-  cal_longest(W);
-  double area = (N->dis)*(E->dis);
-  double wire = 0;
-  for (int i = 0;i < pair_num;i++) {
-    //Horizon wire
-    double x1 = (rectangles[pairs[i].first].GET_H()->GET_S())->dis+rectangles[pairs[i].first].GET_WIDTH(c->ifrotate[pairs[i].first])/2;
-    double y1 = (rectangles[pairs[i].first].GET_H()->GET_T())->dis-rectangles[pairs[i].first].GET_WIDTH(c->ifrotate[pairs[i].first])/2;
-    double x2 = (rectangles[pairs[i].second].GET_H()->GET_S())->dis+rectangles[pairs[i].second].GET_WIDTH(c->ifrotate[pairs[i].second])/2;
-    double y2 = (rectangles[pairs[i].second].GET_H()->GET_T())->dis-rectangles[pairs[i].second].GET_WIDTH(c->ifrotate[pairs[i].second])/2;   
-    if (x2 > y1) {
-      wire += (x2 - y1);
-      rectangles[pairs[i].first].SET_X(y1);
-      rectangles[pairs[i].second].SET_X(x2);
-    }
-    else
-    if (x1 > y2) {
-      wire += (x1 - y2);
-      rectangles[pairs[i].first].SET_X(x1);
-      rectangles[pairs[i].second].SET_X(y2);
-    } else {
-      rectangles[pairs[i].first].SET_X((x1>x2?x1:x2));
-      rectangles[pairs[i].second].SET_X((x1>x2?x1:x2));
-    }
+  double ret = -1;
+  if (q) {
+    cal_longest(S);
+    cal_longest(W);
+    double area = (N->dis)*(E->dis);
+    double wire = 0;
+    for (int i = 0;i < pair_num;i++) {
+      //Horizon wire
+      double x1 = (rectangles[pairs[i].first].GET_H()->GET_S())->dis+rectangles[pairs[i].first].GET_WIDTH(c->ifrotate[pairs[i].first])/2;
+      double y1 = (rectangles[pairs[i].first].GET_H()->GET_T())->dis-rectangles[pairs[i].first].GET_WIDTH(c->ifrotate[pairs[i].first])/2;
+      double x2 = (rectangles[pairs[i].second].GET_H()->GET_S())->dis+rectangles[pairs[i].second].GET_WIDTH(c->ifrotate[pairs[i].second])/2;
+      double y2 = (rectangles[pairs[i].second].GET_H()->GET_T())->dis-rectangles[pairs[i].second].GET_WIDTH(c->ifrotate[pairs[i].second])/2;   
+      if (x2 > y1) {
+        wire += (x2 - y1);
+        rectangles[pairs[i].first].SET_X(y1);
+        rectangles[pairs[i].second].SET_X(x2);
+      }
+      else
+      if (x1 > y2) {
+        wire += (x1 - y2);
+        rectangles[pairs[i].first].SET_X(x1);
+        rectangles[pairs[i].second].SET_X(y2);
+      } else {
+        rectangles[pairs[i].first].SET_X((x1>x2?x1:x2));
+        rectangles[pairs[i].second].SET_X((x1>x2?x1:x2));
+      }
     
-    //Vertical wire
-    x1 = (rectangles[pairs[i].first].GET_V()->GET_S())->dis+rectangles[pairs[i].first].GET_HEIGHT(c->ifrotate[pairs[i].first])/2;
-    y1 = (rectangles[pairs[i].first].GET_V()->GET_T())->dis-rectangles[pairs[i].first].GET_HEIGHT(c->ifrotate[pairs[i].first])/2;
-    x2 = (rectangles[pairs[i].second].GET_V()->GET_S())->dis+rectangles[pairs[i].second].GET_HEIGHT(c->ifrotate[pairs[i].second])/2;
-    y2 = (rectangles[pairs[i].second].GET_V()->GET_T())->dis-rectangles[pairs[i].second].GET_HEIGHT(c->ifrotate[pairs[i].second])/2;   
-    if (x2 > y1) {
-      wire += (x2 - y1);
-      rectangles[pairs[i].first].SET_Y(y1);
-      rectangles[pairs[i].second].SET_Y(x2);
+      //Vertical wire
+      x1 = (rectangles[pairs[i].first].GET_V()->GET_S())->dis+rectangles[pairs[i].first].GET_HEIGHT(c->ifrotate[pairs[i].first])/2;
+      y1 = (rectangles[pairs[i].first].GET_V()->GET_T())->dis-rectangles[pairs[i].first].GET_HEIGHT(c->ifrotate[pairs[i].first])/2;
+      x2 = (rectangles[pairs[i].second].GET_V()->GET_S())->dis+rectangles[pairs[i].second].GET_HEIGHT(c->ifrotate[pairs[i].second])/2;
+      y2 = (rectangles[pairs[i].second].GET_V()->GET_T())->dis-rectangles[pairs[i].second].GET_HEIGHT(c->ifrotate[pairs[i].second])/2;   
+      if (x2 > y1) {
+        wire += (x2 - y1);
+        rectangles[pairs[i].first].SET_Y(y1);
+        rectangles[pairs[i].second].SET_Y(x2);
+      }
+      else
+      if (x1 > y2) {
+        wire += (x1 - y2);
+        rectangles[pairs[i].first].SET_Y(x1);
+        rectangles[pairs[i].second].SET_Y(y2);
+      } else {
+        rectangles[pairs[i].first].SET_Y((x1>x2?x1:x2));
+        rectangles[pairs[i].second].SET_Y((x1>x2?x1:x2));
+      }
     }
-    else
-    if (x1 > y2) {
-      wire += (x1 - y2);
-      rectangles[pairs[i].first].SET_Y(x1);
-      rectangles[pairs[i].second].SET_Y(y2);
-    } else {
-      rectangles[pairs[i].first].SET_Y((x1>x2?x1:x2));
-      rectangles[pairs[i].second].SET_Y((x1>x2?x1:x2));
-    }
+    ret = PARAMETER * area + (1 - PARAMETER) * wire;
   }
-  return PARAMETER * area + (1 - PARAMETER) * wire;
+  kill();
+  return ret;
 }
 
-Content* CornerBlockList::RandomChange(const Content* c,int Re) {
+Content* CornerBlockList::RandomChange(const Content* c) {
   Content* ret = new Content(c);
   int x = std::rand() % 4;
-  if ((x == 0)&&(!Re)) {
+  if (x == 0) {
     int R1 = std::rand() % block_num;
     int R2 = std::rand() % block_num;
     
@@ -283,18 +306,17 @@ Content* CornerBlockList::RandomChange(const Content* c,int Re) {
     ret->block_ids[R1] = ret->block_ids[R1] - ret->block_ids[R2];
     
   } else 
-  if ((x == 1)&&(!Re)) {
+  if (x == 1) {
     int P = std::rand() % (block_num - 1);
     ret->orientations[P] = !ret->orientations[P];
   } else
-  if ((x == 2)&&(!Re)) {
+  if (x == 2) {
     int P = std::rand() % block_num;
     ret->ifrotate[P] = !ret->ifrotate[P];
   } else {
-    int state = ((std::rand()%2)&(!Re))|(ret -> uncover_rec_num.size() == block_num - 1);
-
+    int state = (std::rand()%2)|(ret -> uncover_rec_num.size() == block_num - 1);
+    
     if (state) {
-
       (ret->uncover_rec_num).insert((ret->uncover_rec_num).begin() + std::rand()%(ret->uncover_rec_num.size()), true);
     } else {
       int p = std::rand()%(ret -> uncover_rec_num.size() - block_num + 1) + 1;
