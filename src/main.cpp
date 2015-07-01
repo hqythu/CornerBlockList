@@ -19,6 +19,7 @@ int main() {
 
     for (auto cbl : cbls) {
         cbl.optimize();
+        cbl.show();
     }
 
     return 0;

@@ -21,10 +21,10 @@ class Rectangle {
       V_edge = new Edge(width);
       H_edge = new Edge(height);
     }
-    double CENTER_X() { return center_x; }
-    double CENTER_Y() { return center_y; }  
-    double GET_WIDTH(bool s) { return (s?height:width); }
-    double GET_HEIGHT(bool s) { return (s?width:height); }
+    double CENTER_X() const { return center_x; }
+    double CENTER_Y() const { return center_y; }
+    double GET_WIDTH(bool s) const { return (s?height:width); }
+    double GET_HEIGHT(bool s) const { return (s?width:height); }
     Edge* GET_V() { return V_edge; }
     Edge* GET_H() { return H_edge;  }
     void SET_X(double x) { center_x = x; }

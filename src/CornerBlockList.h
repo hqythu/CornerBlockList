@@ -12,6 +12,7 @@
 #include <utility>
 #include "Node.h"
 #include "Content.h"
+#include "Visualizer.h"
 
 class CornerBlockList {
     std::vector<Rectangle> rectangles;

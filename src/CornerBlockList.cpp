@@ -76,8 +76,8 @@ CornerBlockList::CornerBlockList(const std::string& file_name) {
 }
 
 void CornerBlockList::show() {
-
-
+  Visualizer visualizer(N -> dis, E -> dis);
+  visualizer.show(rectangles);
 }
 
 void CornerBlockList::optimize() {
