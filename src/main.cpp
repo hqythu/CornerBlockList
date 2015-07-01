@@ -17,6 +17,10 @@ int main() {
 
     vector<CornerBlockList> cbls;
 
+    for (int i = 0; i < TEST_FILE_NUM; i++) {
+        cbls.push_back(CornerBlockList(FILE_NAME_PREFIX + std::to_string(i) + FILE_NAME_SUFFIX));
+    }
+
     for (auto cbl : cbls) {
         cbl.optimize();
         cbl.show();
