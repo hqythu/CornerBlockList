@@ -39,7 +39,7 @@ void TestCaseGenerator::generate(int cnt) {
         std::string file_name = "../test/data_in_" + std::to_string(i) + ".txt";
         fout.open(file_name, std::ios::out | std::ios::trunc | std::ios::binary);
 
-        int n = RECTANGLE_NUM_MIN + std::rand() % (RECTANGLE_NUM_MAX - RECTANGLE_NUM_MIN);
+        int n = RECTANGLE_NUM;
 
         if (fout.is_open()) {
             // write random rectangles' number
@@ -60,15 +60,21 @@ void TestCaseGenerator::generate(int cnt) {
             // TODO: The random pairs generator may has a better implementation
 
             std::vector<std::pair<int, int> > pairs;
-
-            // make double pairs to ensure enough unique pairs.
-            for (int j = 0; j < 2 * PAIR_NUM; j++)
-                pairs.push_back(std::make_pair(std::rand() % n + 1, std::rand() % n + 1));
-
-            // unique
-            pairs.erase(std::unique(pairs.begin(), pairs.end(), pred), pairs.end());
-
+            
+            int flag[n];
+            memset(flag,0,sizeof(flag));
+            
+            for (int i = 0;i < n;i++)
+              if (!flag[i]) {
+                flag[i] = 1;
+                int tmp = i;
+                while (flag[tmp])
+                  tmp = rand()%n;
+                pairs.push_back(std::make_pair(i,tmp));
+              }
+            
             // print
+            fout << PAIR_NUM << endl; 
             int count = 0;
             while (count++ < PAIR_NUM)
                 fout << pairs[count].first << ' ' << pairs[count].second << std::endl;

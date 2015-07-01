@@ -10,26 +10,24 @@
 #include <vector>
 #include <string>
 #include <utility>
+#include "Node.h"
+#include "Content.h"
 
 class CornerBlockList {
     std::vector<Rectangle> rectangles;
-
-    // Mr. Yao uses letter to present every block and
-    // I think block id will be better.
-    std::vector<int> block_ids;
-
-    // 0 for horizontal and 1 for vertical
-    std::vector<bool> orientations;
-
-    // 0 presents 1 and 10 presents 2, details in PPT
-    std::vector<bool> uncover_rec_num;
-
+    Content* con;
     // Two stacks used in show()
     std::vector<int> HStack;
     std::vector<int> VStack;
 
     // pairs
     std::vector< std::pair<int, int> > pairs;
+    
+    int block_num,pair_num;
+    Node* E,S,W,N;
+    Content* RandomChange(const Content* c,int Re);
+    void build(const Content* c);
+    void cal_longest();
 public:
     CornerBlockList();
     CornerBlockList(const std::string& file_name);
@@ -44,8 +42,7 @@ public:
     // Considering both the weighted sum of the area
     // and the total Manhattan wirelength with a
     // parameter between 0 and 1.
-    void assess();
-
+    double assess(const Content* c);
 };
 
 
