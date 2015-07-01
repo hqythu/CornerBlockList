@@ -24,21 +24,21 @@ public:
         H_edge = new Edge(height);
     }
 
-    double CENTER_X() const { return center_x; }
+    double get_center_x() const { return center_x; }
 
-    double CENTER_Y() const { return center_y; }
+    double get_center_y() const { return center_y; }
 
-    double GET_WIDTH(bool s) const { return (s ? height : width); }
+    double get_width(bool s) const { return (s ? height : width); }
 
-    double GET_HEIGHT(bool s) const { return (s ? width : height); }
+    double get_height(bool s) const { return (s ? width : height); }
 
-    Edge *GET_V() { return V_edge; }
+    Edge *get_V() { return V_edge; }
 
-    Edge *GET_H() { return H_edge; }
+    Edge *get_H() { return H_edge; }
 
-    void SET_X(double x) { center_x = x; }
+    void set_X(double x) { center_x = x; }
 
-    void SET_Y(double y) { center_y = y; }
+    void set_Y(double y) { center_y = y; }
 };
 
 #endif //CORNERBLOCKLIST_SQUARE_H

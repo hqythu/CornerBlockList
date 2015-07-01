@@ -27,8 +27,7 @@ const double PARAMETER = 0.5;
 
 const double LAMDA = 2;
 
-const double ini_temp = 1000;
-const double goal_temp = 30;
-const int every = 50;
-const double dy = 500;
+const double INIT_TEMP = 1000;
+const double GOAL_TEMP = 0.1;
+const int EVERY = 1000;
 #endif //CORNERBLOCKLIST_COMMON_H

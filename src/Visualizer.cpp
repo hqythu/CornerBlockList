@@ -13,10 +13,10 @@ void Visualizer::show(const std::vector<Rectangle> &rects) {
     cv::Mat picture(height, width, CV_8UC3, cv::Scalar(255, 255, 255));
 
     for (const auto &rect : rects) {
-        cv::Point pt1(rect.CENTER_X() - 0.5 * rect.GET_WIDTH(0), rect.CENTER_Y() + rect.GET_HEIGHT(0));
-        cv::Point pt2(rect.CENTER_X() + 0.5 * rect.GET_WIDTH(0), rect.CENTER_Y() + rect.GET_HEIGHT(0));
-        cv::Point pt3(rect.CENTER_X() + 0.5 * rect.GET_WIDTH(0), rect.CENTER_Y() - rect.GET_HEIGHT(0));
-        cv::Point pt4(rect.CENTER_X() - 0.5 * rect.GET_WIDTH(0), rect.CENTER_Y() - rect.GET_HEIGHT(0));
+        cv::Point pt1(rect.get_center_x() - 0.5 * rect.get_width(0), rect.get_center_y() + rect.get_height(0));
+        cv::Point pt2(rect.get_center_x() + 0.5 * rect.get_width(0), rect.get_center_y() + rect.get_height(0));
+        cv::Point pt3(rect.get_center_x() + 0.5 * rect.get_width(0), rect.get_center_y() - rect.get_height(0));
+        cv::Point pt4(rect.get_center_x() - 0.5 * rect.get_width(0), rect.get_center_y() - rect.get_height(0));
 
         cv::line(picture, pt1, pt2, cv::Scalar(0, 0, 0));
         cv::line(picture, pt2, pt3, cv::Scalar(0, 0, 0));
