@@ -28,7 +28,7 @@ class CornerBlockList {
     Node* N;
     Node* W;
     Node* S;
-    Content* RandomChange(const Content* c,int Re);
+    Content* RandomChange(const Content* c);
     bool build(const Content* c);
     void cal_longest(Node* start);
     void kill();

@@ -25,4 +25,9 @@ const int PAIR_NUM = RECTANGLE_NUM / 2;
 const double PARAMETER = 0.5;
  
 const double LAMDA = 2;
+
+const double ini_temp = 1000;
+const double goal_temp = 30;
+const int every = 50;
+const double dy = 500;
 #endif //CORNERBLOCKLIST_COMMON_H
