@@ -4,6 +4,7 @@
 
 #ifndef CORNERBLOCKLIST_COMMON_H
 #define CORNERBLOCKLIST_COMMON_H
+
 #include <string>
 
 const std::string FILE_NAME_PREFIX = "../test/data_in_";
@@ -23,7 +24,7 @@ const int PAIR_NUM = RECTANGLE_NUM / 2;
 
 // a parameter between 0 and 1 to decide the optimization
 const double PARAMETER = 0.5;
- 
+
 const double LAMDA = 2;
 
 const double ini_temp = 1000;

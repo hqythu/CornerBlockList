@@ -16,26 +16,32 @@
 
 class CornerBlockList {
     std::vector<Rectangle> rectangles;
-    Content* con;
+    Content *con;
     // Two stacks used in show()
     std::vector<int> HStack;
     std::vector<int> VStack;
 
     // pairs
-    std::vector< std::pair<int, int> > pairs;
-    
-    int block_num,pair_num;
-    Node* E;
-    Node* N;
-    Node* W;
-    Node* S;
-    Content* RandomChange(const Content* c);
-    bool build(const Content* c);
-    void cal_longest(Node* start);
+    std::vector<std::pair<int, int> > pairs;
+
+    int block_num, pair_num;
+    Node *E;
+    Node *N;
+    Node *W;
+    Node *S;
+
+    Content *RandomChange(const Content *c);
+
+    bool build(const Content *c);
+
+    void cal_longest(Node *start);
+
     void kill();
+
 public:
     CornerBlockList();
-    CornerBlockList(const std::string& file_name);
+
+    CornerBlockList(const std::string &file_name);
 
     // show the CBL in GUI
     void show();
@@ -47,7 +53,7 @@ public:
     // Considering both the weighted sum of the area
     // and the total Manhattan wirelength with a
     // parameter between 0 and 1.
-    double assess(const Content* c);
+    double assess(const Content *c);
 };
 
 

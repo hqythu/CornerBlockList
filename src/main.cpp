@@ -11,11 +11,11 @@ using namespace std;
 int main() {
     test::TestCaseGenerator *generator = test::TestCaseGenerator::Instance();
 
-    generator -> generate(TEST_FILE_NUM);
+    generator->generate(TEST_FILE_NUM);
 
     delete generator;
 
-    vector <CornerBlockList> cbls;
+    vector<CornerBlockList> cbls;
 
     for (auto cbl : cbls) {
         cbl.optimize();

@@ -9,10 +9,10 @@
 
 using namespace cv;
 
-void Visualizer::show(const std::vector<Rectangle>& rects) {
+void Visualizer::show(const std::vector<Rectangle> &rects) {
     cv::Mat picture(height, width, CV_8UC3, cv::Scalar(255, 255, 255));
 
-    for (const auto& rect : rects) {
+    for (const auto &rect : rects) {
         cv::Point pt1(rect.CENTER_X() - 0.5 * rect.GET_WIDTH(0), rect.CENTER_Y() + rect.GET_HEIGHT(0));
         cv::Point pt2(rect.CENTER_X() + 0.5 * rect.GET_WIDTH(0), rect.CENTER_Y() + rect.GET_HEIGHT(0));
         cv::Point pt3(rect.CENTER_X() + 0.5 * rect.GET_WIDTH(0), rect.CENTER_Y() - rect.GET_HEIGHT(0));

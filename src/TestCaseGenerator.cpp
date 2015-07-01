@@ -62,14 +62,14 @@ void TestCaseGenerator::generate(int cnt) {
             std::vector<std::pair<int, int> > pairs;
 
             int pair[RECTANGLE_NUM];
-            for (int i = 0;i < RECTANGLE_NUM;i++)
+            for (int i = 0; i < RECTANGLE_NUM; i++)
                 pair[i] = i + 1;
-            std::random_shuffle(pair,pair+RECTANGLE_NUM);
-            
+            std::random_shuffle(pair, pair + RECTANGLE_NUM);
+
             // print
             fout << PAIR_NUM << std::endl;
-            for (int i = 1;i <= PAIR_NUM;i++)
-                fout << pair[2*i-2] << " " << pair[2*i-1] << std::endl;
+            for (int i = 1; i <= PAIR_NUM; i++)
+                fout << pair[2 * i - 2] << " " << pair[2 * i - 1] << std::endl;
         }
         else {
             std::cerr << "ERROR: FILE NOT OPEN!" << std::endl;
