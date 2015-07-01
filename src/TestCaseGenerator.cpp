@@ -60,24 +60,16 @@ void TestCaseGenerator::generate(int cnt) {
             // TODO: The random pairs generator may has a better implementation
 
             std::vector<std::pair<int, int> > pairs;
-            
-            int flag[n];
-            memset(flag,0,sizeof(flag));
-            
-            for (int i = 0;i < n;i++)
-              if (!flag[i]) {
-                flag[i] = 1;
-                int tmp = i;
-                while (flag[tmp])
-                  tmp = rand()%n;
-                pairs.push_back(std::make_pair(i,tmp));
-              }
+
+            int pair[RECTANGLE_NUM];
+            for (int i = 0;i < RECTANGLE_NUM;i++)
+                pair[i] = i + 1;
+            std::random_shuffle(pair,pair+RECTANGLE_NUM);
             
             // print
-            fout << PAIR_NUM << endl; 
-            int count = 0;
-            while (count++ < PAIR_NUM)
-                fout << pairs[count].first << ' ' << pairs[count].second << std::endl;
+            fout << PAIR_NUM << std::endl;
+            for (int i = 1;i <= PAIR_NUM;i++)
+                fout << pair[2*i-2] << " " << pair[2*i-1] << std::endl;
         }
         else {
             std::cerr << "ERROR: FILE NOT OPEN!" << std::endl;

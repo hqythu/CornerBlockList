@@ -4,6 +4,8 @@
 
 #ifndef CORNERBLOCKLIST_RECTANGLE_H
 #define CORNERBLOCKLIST_RECTANGLE_H
+#include "Edge.h"
+#include "Node.h"
 
 class Rectangle {
   private:
@@ -15,7 +17,7 @@ class Rectangle {
     Edge *H_edge;
   public:
     Rectangle() {}
-    Rectangle(double w, double h) : left_bottom_x(0), left_bottom_y(0), width(w), height(h) {
+    Rectangle(double w, double h) : center_x(0), center_y(0), width(w), height(h) {
       V_edge = new Edge(width);
       H_edge = new Edge(height);
     }
@@ -25,8 +27,8 @@ class Rectangle {
     double GET_HEIGHT(bool s) { return (s?width:height); }
     Edge* GET_V() { return V_edge; }
     Edge* GET_H() { return H_edge;  }
-    void SET_X(int x) { center_x = x; }
-    void SET_Y(int y) { center_y = y; }
+    void SET_X(double x) { center_x = x; }
+    void SET_Y(double y) { center_y = y; }
 };
 
 #endif //CORNERBLOCKLIST_SQUARE_H

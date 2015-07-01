@@ -2,6 +2,9 @@
 #define NODE_H
 
 #include <vector>
+#include "Edge.h"
+
+class Edge;
 
 struct Node {
     std::vector<Edge*> edges;
@@ -11,3 +14,5 @@ struct Node {
     void ini() { dis = 0; Go_in = 0; }
     void Add(Edge* e) { edges.push_back(e); }
 };
+
+#endif

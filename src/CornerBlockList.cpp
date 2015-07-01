@@ -4,6 +4,7 @@
 
 #include "CornerBlockList.h"
 #include "common.h"
+#include "Edge.h"
 #include <iostream>
 #include <fstream>
 #include <cmath>
@@ -13,7 +14,8 @@
 
 CornerBlockList::CornerBlockList() {
   block_num = pair_num = 0;
-  E = W = N = S = NULL;
+
+  E = W = N = S = nullptr;
 }
 
 // TODO
@@ -53,8 +55,8 @@ CornerBlockList::CornerBlockList(const std::string& file_name) {
 
     fin.close();
 
-    block_ids.clear();
-    orientations.clear();
+//    block_ids.clear();
+//    orientations.clear();
 
     std::srand(std::time(nullptr));
     
@@ -67,7 +69,7 @@ CornerBlockList::CornerBlockList(const std::string& file_name) {
     std::random_shuffle(con->block_ids.begin(),con->block_ids.end());
     for (int i = 1; i < block_num; i++)
       con->orientations.push_back(rand()%2);
-    ones = 0;
+    int ones = 0;
     for (int i = 1;i < block_num; i++) {
       int x = rand()%(i - ones + 1);
       for (int j = 0;j < x;j++)
@@ -87,8 +89,7 @@ void CornerBlockList::show() {
 }
 
 void CornerBlockList::optimize() {
-  temp = ;
-  
+
   
 }
 
@@ -103,14 +104,14 @@ bool CornerBlockList::build(const Content* con) {
   }
   
   Edge* e = rectangles[con->block_ids[0]].GET_V();
-  e.SetS(S);
-  e.SetT(N);
+  e -> SetS(S);
+  e -> SetT(N);
   N->Go_in++;
   
   e = rectangles[con->block_ids[0]].GET_H();
-  e.SetS(W);
-  e.SetT(E);
-  E->Go_in++;
+  e -> SetS(W);
+  e -> SetT(E);
+  E -> Go_in++;
   
   int p = 0;
   for (int i = 1;i < block_num;i++) {
@@ -139,7 +140,7 @@ bool CornerBlockList::build(const Content* con) {
       Node* nod = new Node();
         
       for (int j = 1;j <= num;j++) 
-        (rectangles[VStack[VStack.size()-j]].GET_V()).SetT(nod);
+        (rectangles[VStack[VStack.size()-j]].GET_V()) -> SetT(nod);
       nod->Go_in = num;
       e = rectangles[now].GET_V();  
       e->SetS(nod);
@@ -150,7 +151,7 @@ bool CornerBlockList::build(const Content* con) {
       //push
       HStack.push_back(now);
       for (int j = 1;j <= num;j++)
-        VStack.pop();
+        VStack.pop_back();
       VStack.push_back(now); 
     } else {
       //Check
@@ -169,7 +170,7 @@ bool CornerBlockList::build(const Content* con) {
       //build H Graph
       Node* nod = new Node();
       for (int j = 1;j <= num;j++) 
-        (rectangles[HStack[HStack.size()-j]].GET_H()).SetT(nod);
+        (rectangles[HStack[HStack.size()-j]].GET_H()) -> SetT(nod);
       e = rectangles[now].GET_H();  
       e->SetS(nod);
       e->SetT(E);
@@ -178,7 +179,7 @@ bool CornerBlockList::build(const Content* con) {
       //push
       VStack.push_back(now);
       for (int j = 1;j <= num;j++)
-        HStack.pop();
+        HStack.pop_back();
       HStack.push_back(now); 
     }
   }
@@ -188,10 +189,12 @@ bool CornerBlockList::build(const Content* con) {
 void CornerBlockList::cal_longest(Node* start) {
   std::vector<Node*> nod_array;
   nod_array.push_back(start);
-  
-  for (int head = 0,tail = 0;head <= tail;head++) {  
+  int head = 0;
+  int tail = 0;
+
+  for (head = 0,tail = 0;head <= tail;head++) {
     for (int i = 0;i < (nod_array[head]->edges).size();i++) {
-      Node* tmp = ((nod_array[head]->edges)[i]).GET_T();
+      Node* tmp = ((nod_array[head]->edges)[i]) -> GET_T();
       if (!(--tmp->Go_in)) {
         tail++;
         nod_array.push_back(tmp);
@@ -219,7 +222,7 @@ double CornerBlockList::assess(const Content* c) {
   cal_longest(S);
   cal_longest(W);
   double area = (N->dis)*(E->dis);
-  wire = 0;
+  double wire = 0;
   for (int i = 0;i < pair_num;i++) {
     //Horizon wire
     double x1 = (rectangles[pairs[i].first].GET_H()->GET_S())->dis+rectangles[pairs[i].first].GET_WIDTH(c->ifrotate[pairs[i].first])/2;
@@ -261,7 +264,7 @@ double CornerBlockList::assess(const Content* c) {
       rectangles[pairs[i].second].SET_Y((x1>x2?x1:x2));
     }
   }
-  return PARAMETER*area + (1-PAMAMETER)*wire;
+  return PARAMETER * area + (1 - PARAMETER) * wire;
 }
 
 Content* CornerBlockList::RandomChange(const Content* c,int Re) {
@@ -275,34 +278,36 @@ Content* CornerBlockList::RandomChange(const Content* c,int Re) {
       R2 = std::rand() % block_num;
       
     //Swap id
-    ret->block_ids[R1] = ret->blocks_ids[R1] + ret->block_ids[R2];
-    ret->block_ids[R2] = ret->blocks_ids[R1] - ret->block_ids[R2];
-    ret->block_ids[R1] = ret->blocks_ids[R1] - ret->block_ids[R2];
+    ret->block_ids[R1] = ret->block_ids[R1] + ret->block_ids[R2];
+    ret->block_ids[R2] = ret->block_ids[R1] - ret->block_ids[R2];
+    ret->block_ids[R1] = ret->block_ids[R1] - ret->block_ids[R2];
     
   } else 
   if ((x == 1)&&(!Re)) {
     int P = std::rand() % (block_num - 1);
-    ret->orientations[i] = !ret->orientations[i];
+    ret->orientations[P] = !ret->orientations[P];
   } else
   if ((x == 2)&&(!Re)) {
     int P = std::rand() % block_num;
-    ret->ifrotate[i] = !ret->ifrotate[i];
+    ret->ifrotate[P] = !ret->ifrotate[P];
   } else {
-    int state = ((std::rand()%2)&(!Re))|(uncover_rec_num.size() == block_num - 1);
+    int state = ((std::rand()%2)&(!Re))|(ret -> uncover_rec_num.size() == block_num - 1);
 
-    if (state) { 
-      uncover_rec_num.insert(uncover_rec_num.begin()+std::rand()%uncover_rec_num.size(),1);
+    if (state) {
+
+      (ret->uncover_rec_num).insert((ret->uncover_rec_num).begin() + std::rand()%(ret->uncover_rec_num.size()), true);
     } else {
-      int p = std::rand()%(uncover_rec_num.size() - block_num + 1) + 1;
+      int p = std::rand()%(ret -> uncover_rec_num.size() - block_num + 1) + 1;
       
-      for (std::vector<int>::iterator i = uncover_rec_num.begin();i != uncover_rec_num.end();i++)
+      for (std::vector<bool>::iterator i = (ret -> uncover_rec_num).begin();i != (ret -> uncover_rec_num).end();i++)
         if ((*i)) {
           p--;
           if (!p) {
-            uncover_rec_num.erase(i);
+            ret -> uncover_rec_num.erase(i);
             break;
           }
         }
-    }  
+    }
   }
+  return ret;
 }

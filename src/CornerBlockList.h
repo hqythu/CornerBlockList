@@ -24,10 +24,13 @@ class CornerBlockList {
     std::vector< std::pair<int, int> > pairs;
     
     int block_num,pair_num;
-    Node* E,S,W,N;
+    Node* E;
+    Node* N;
+    Node* W;
+    Node* S;
     Content* RandomChange(const Content* c,int Re);
-    void build(const Content* c);
-    void cal_longest();
+    bool build(const Content* c);
+    void cal_longest(Node* start);
 public:
     CornerBlockList();
     CornerBlockList(const std::string& file_name);

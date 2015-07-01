@@ -1,6 +1,7 @@
 
 #ifndef EDGE_H
 #define EDGE_H
+#include "Node.h"
 
 class Edge {
   private:
@@ -17,3 +18,5 @@ class Edge {
     Node* GET_T() { return t; }
     double GET_LEN() { return length; }
 };
+
+#endif
