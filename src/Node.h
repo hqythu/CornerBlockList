@@ -7,16 +7,11 @@
 class Edge;
 
 struct Node {
-    std::vector<Edge *> edges;
+    std::vector<Edge*> edges;
     double dis;
     int Go_in;
-
-    Node() {
-        dis = 0;
-        Go_in = 0;
-    }
-
-    void Add(Edge *e) { edges.push_back(e); }
+    Node() { dis = 0; Go_in = 0;}
+    void Add(Edge* e) { edges.push_back(e); }
 };
 
 #endif

@@ -11,20 +11,16 @@ using namespace std;
 int main() {
     test::TestCaseGenerator *generator = test::TestCaseGenerator::Instance();
 
-    generator->generate(TEST_FILE_NUM);
+    generator -> generate(TEST_FILE_NUM);
+
+    vector <CornerBlockList> cbls;
+    for (int i = 0; i < TEST_FILE_NUM; i++)
+        cbls.push_back(CornerBlockList(FILE_NAME_PREFIX + char(i+'0') + FILE_NAME_SUFFIX));
+    for (int i = 0; i < TEST_FILE_NUM; i++)
+				cbls[i].optimize();
+    for (vector <CornerBlockList>::iterator cbl = cbls.begin();cbl!=cbls.end();cbl++)
+        (*cbl).show();
 
     delete generator;
-
-    vector<CornerBlockList> cbls;
-
-    for (int i = 0; i < TEST_FILE_NUM; i++) {
-        cbls.push_back(CornerBlockList(FILE_NAME_PREFIX + std::to_string(i) + FILE_NAME_SUFFIX));
-    }
-
-    for (auto cbl : cbls) {
-        cbl.optimize();
-        cbl.show();
-    }
-
     return 0;
 }
