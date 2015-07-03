@@ -89,10 +89,8 @@ void CornerBlockList::show() {
 void CornerBlockList::optimize() {
     double temp = INI_TEMP;
     double now = evaluate(state);
-    int exit_req = 0;
     double every = START_NUM;
     while (temp > GOAL_TEMP) {
-        int k = 0;
         for (int i = 1; i <= every; i++) {
             State *tmp = RandomChange(state);
             double next = evaluate(tmp);
@@ -107,7 +105,6 @@ void CornerBlockList::optimize() {
         }
         temp *= DEC;
         std::cout << (int) ((log(INI_TEMP) - log(temp)) / (log(INI_TEMP / GOAL_TEMP)) * 100) << '%' << std::endl;
-        every *= INC;
     }
 }
 

@@ -25,10 +25,9 @@ const int PAIR_NUM = RECTANGLE_NUM / 2;
 const int SCREEN_WIDTH = 500;
 
 // a parameter between 0 and 1 to decide the optimization
-const double PARAMETER = 0.95;
+const double PARAMETER = 0.97;
 const double INI_TEMP = 1000;
 const double GOAL_TEMP = 0.01;
-const int START_NUM = RECTANGLE_NUM * 10;
+const int START_NUM = RECTANGLE_NUM * 20;
 const double DEC = 0.95;
-const double INC = 1.0;
 #endif //CORNERBLOCKLIST_COMMON_H

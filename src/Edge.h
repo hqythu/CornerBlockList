@@ -11,7 +11,7 @@ private:
 public:
     Edge() { }
 
-    Edge(double len) : s(nullptr), t(nullptr), length(len) { }
+    Edge(double len) : length(len), s(nullptr), t(nullptr) { }
 
     void set_len(double x) { length = x; }
 
