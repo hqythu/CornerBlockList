@@ -9,18 +9,18 @@
 using namespace std;
 
 int main() {
-	test::TestCaseGenerator *generator = test::TestCaseGenerator::Instance();
+    test::TestCaseGenerator *generator = test::TestCaseGenerator::Instance();
 
-    generator -> generate(TEST_FILE_NUM);
+    generator->generate(TEST_FILE_NUM);
     delete generator;
 
-    vector <CornerBlockList> cbls;
+    vector<CornerBlockList> cbls;
     for (int i = 0; i < TEST_FILE_NUM; i++)
-        cbls.push_back(CornerBlockList(FILE_NAME_PREFIX + char(i+'0') + FILE_NAME_SUFFIX));
+        cbls.push_back(CornerBlockList(FILE_NAME_PREFIX + char(i + '0') + FILE_NAME_SUFFIX));
     for (int i = 0; i < TEST_FILE_NUM; i++)
         cbls[i].optimize();
-    for (auto cbl = cbls.begin();cbl!=cbls.end();cbl++)
-        cbl -> show();
+    for (auto cbl = cbls.begin(); cbl != cbls.end(); cbl++)
+        cbl->show();
 
     return 0;
 }

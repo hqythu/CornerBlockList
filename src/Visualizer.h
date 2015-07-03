@@ -11,7 +11,7 @@
 
 class Visualizer {
 public:
-    void show(const std::vector<Rectangle>& rectangles, State* state) const;
+    void show(const std::vector<Rectangle> &rectangles, State *state) const;
 };
 
 

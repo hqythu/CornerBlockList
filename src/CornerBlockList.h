@@ -15,26 +15,32 @@
 
 class CornerBlockList {
     std::vector<Rectangle> rectangles;
-    State* state;
+    State *state;
     // Two stacks used in show()
     std::vector<int> HStack;
     std::vector<int> VStack;
 
     // pairs
-    std::vector< std::pair<int, int> > pairs;
-    std::vector<Node*> nd_list;
-    int block_num,pair_num;
-    Node* E;
-    Node* N;
-    Node* W;
-    Node* S;
-    State * RandomChange(const State * c);
-    bool build(const State * c);
-    void cal_longest(Node* start);
+    std::vector<std::pair<int, int> > pairs;
+    std::vector<Node *> nd_list;
+    int block_num, pair_num;
+    Node *E;
+    Node *N;
+    Node *W;
+    Node *S;
+
+    State *RandomChange(const State *c);
+
+    bool build(const State *c);
+
+    void cal_longest(Node *start);
+
     void kill();
+
 public:
     CornerBlockList();
-    CornerBlockList(const std::string& file_name);
+
+    CornerBlockList(const std::string &file_name);
 
     // show the CBL in GUI
     void show();

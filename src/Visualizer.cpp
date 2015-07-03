@@ -11,11 +11,12 @@
 
 using namespace cv;
 
-void Visualizer::show(const std::vector<Rectangle>& rectangles, State* state) const {
+void Visualizer::show(const std::vector<Rectangle> &rectangles, State *state) const {
     double screen_width = 0;
     double screen_height = 0;
-    for (int i = 0;i < RECTANGLE_NUM;i++) {
-        screen_width = std::max(screen_width, rectangles[i].get_center_x() + 0.5 * rectangles[i].get_width(state->ifrotate[i]));
+    for (int i = 0; i < RECTANGLE_NUM; i++) {
+        screen_width = std::max(screen_width,
+                                rectangles[i].get_center_x() + 0.5 * rectangles[i].get_width(state->ifrotate[i]));
         screen_height = std::max(screen_height,
                                  rectangles[i].get_center_y() + 0.5 * rectangles[i].get_height(state->ifrotate[i]));
     }
@@ -23,11 +24,11 @@ void Visualizer::show(const std::vector<Rectangle>& rectangles, State* state) co
     screen_width *= propotion;
     screen_height *= propotion;
     cv::Mat picture(screen_height * 1.05, screen_width * 1.05, CV_8UC3, cv::Scalar(255, 255, 255));
-    for (int i = 0;i < RECTANGLE_NUM;i++) {
+    for (int i = 0; i < RECTANGLE_NUM; i++) {
         double center_x = rectangles[i].get_center_x() * propotion;
         double center_y = rectangles[i].get_center_y() * propotion;
-        double half_width = 0.5 * rectangles[i].get_width(state -> ifrotate[i]) * propotion;
-        double half_height = 0.5 * rectangles[i].get_height(state -> ifrotate[i]) * propotion;
+        double half_width = 0.5 * rectangles[i].get_width(state->ifrotate[i]) * propotion;
+        double half_height = 0.5 * rectangles[i].get_height(state->ifrotate[i]) * propotion;
 
         cv::Point pt1(center_x - half_width, center_y + half_height);
         cv::Point pt2(center_x + half_width, center_y + half_height);

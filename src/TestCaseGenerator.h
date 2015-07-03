@@ -7,22 +7,22 @@
 
 namespace test {
 
-class TestCaseGenerator {
-private:
+    class TestCaseGenerator {
+    private:
 
-    static TestCaseGenerator *generator_;
+        static TestCaseGenerator *generator_;
 
-    TestCaseGenerator() { };
+        TestCaseGenerator() { };
 
-    TestCaseGenerator(const TestCaseGenerator &) { };
+        TestCaseGenerator(const TestCaseGenerator &) { };
 
-    TestCaseGenerator &operator=(const TestCaseGenerator &) { return *generator_; }
+        TestCaseGenerator &operator=(const TestCaseGenerator &) { return *generator_; }
 
-public:
-    static TestCaseGenerator *Instance();
+    public:
+        static TestCaseGenerator *Instance();
 
-    void generate(int cnt);
-};
+        void generate(int cnt);
+    };
 
 }  // test
 
