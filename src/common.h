@@ -11,7 +11,7 @@ const std::string FILE_NAME_SUFFIX = ".txt";
 
 const int TEST_FILE_NUM = 1;
 
-const int RECTANGLE_NUM = 40;
+const int RECTANGLE_NUM = 50;
 
 const int RECTANGLE_WIDTH_MAX = 30;
 const int RECTANGLE_WIDTH_MIN = 10;
@@ -21,12 +21,14 @@ const int RECTANGLE_HEIGHT_MIN = 10;
 
 const int PAIR_NUM = RECTANGLE_NUM / 2;
 
+const int SCREEN_WIDTH = 500;
+
 // a parameter between 0 and 1 to decide the optimization
 const double PARAMETER = 1;
-const double ini_temp = 1000;
-const double goal_temp = 1;
-const int every = 1000;
-const double dy = 500; 
-const double dec = 0.95;
-const double LAMDA = 2;
+const double INI_TEMP = 1000;
+const double GOAL_TEMP = 10;
+const int EXIT_NUM = RECTANGLE_NUM * 150;
+const int START_NUM = RECTANGLE_NUM * 2;
+const double DEC = 0.95;
+const double INC = 1.05;
 #endif //CORNERBLOCKLIST_COMMON_H

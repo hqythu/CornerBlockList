@@ -1,22 +1,23 @@
 //
 // Created by ZhuangTianYi on 15/6/21.
 //
+#include <opencv2/core/core.hpp>
+#include <opencv2/highgui/highgui.hpp>
 
 #include "CornerBlockList.h"
 #include "common.h"
 #include "Edge.h"
-#include "Visualizer.h"
 #include <iostream>
 #include <fstream>
 #include <cmath>
 #include <cstdlib>
 #include <ctime>
 #include <algorithm>
-
+#include <cmath>
 CornerBlockList::CornerBlockList() {
   block_num = pair_num = 0;
 
-  E = W = N = S = nullptr;
+  E = W = N = S = NULL;
 }
 
 // TODO
@@ -59,10 +60,10 @@ CornerBlockList::CornerBlockList(const std::string& file_name) {
 //    block_ids.clear();
 //    orientations.clear();
 
-    std::srand(std::time(nullptr));
+    std::srand(std::time(NULL));
     
     //initial the Corner Block List
-    con = new Content();
+    con = new State();
     for (int i = 0; i < block_num; i++) {
       con->block_ids.push_back(i);
       con->ifrotate.push_back(0);
@@ -77,34 +78,88 @@ CornerBlockList::CornerBlockList(const std::string& file_name) {
 }
 
 void CornerBlockList::show() {
-	for (int i = 0;i < block_num;i++) {
-		std::cout << rectangles[i].CENTER_X() << " " << rectangles[i].CENTER_Y()<<" ";
-		std::cout << rectangles[i].GET_WIDTH(con->ifrotate[i]) << " " << rectangles[i].GET_HEIGHT(con->ifrotate[i]) << std::endl;
-	}
-	std::cout << std::endl;
-  Visualizer visualizer(1000, 1000);
-  visualizer.show(rectangles);
+
+  evaluate(con);
+  double screen_width = 0;
+  double screen_height = 0;
+  for (int i = 0;i < block_num;i++) {
+    screen_width = std::max(screen_width,rectangles[i].CENTER_X() + 0.5 * rectangles[i].get_width(con->ifrotate[i]));
+    screen_height = std::max(screen_height,rectangles[i].CENTER_Y() + 0.5 * rectangles[i].get_height(con->ifrotate[i]));
+  }
+  double propotion = SCREEN_WIDTH / screen_width;
+  screen_width *= propotion;
+  screen_height *= propotion;
+  cv::Mat picture(screen_height * 1.05, screen_width * 1.05, CV_8UC3, cv::Scalar(255, 255, 255));
+  for (int i = 0;i < block_num;i++) {
+
+    cv::Point pt1(rectangles[i].CENTER_X() * propotion - 0.5 * rectangles[i].get_width(con->ifrotate[i]) * propotion, rectangles[i].CENTER_Y() *
+                                                                                                                      propotion + 0.5 *
+                                                                                                                                  rectangles[i].get_height(
+                                                                                                                                          con->ifrotate[i]) *
+                                                                                                                                        propotion);
+    cv::Point pt2(rectangles[i].CENTER_X() * propotion + 0.5 * rectangles[i].get_width(con->ifrotate[i]) * propotion, rectangles[i].CENTER_Y() *
+                                                                                                                      propotion + 0.5 *
+                                                                                                                                  rectangles[i].get_height(
+                                                                                                                                          con->ifrotate[i]) *
+                                                                                                                                        propotion);
+    cv::Point pt3(rectangles[i].CENTER_X() * propotion + 0.5 * rectangles[i].get_width(con->ifrotate[i]) * propotion, rectangles[i].CENTER_Y() *
+                                                                                                                      propotion - 0.5 *
+                                                                                                                                  rectangles[i].get_height(
+                                                                                                                                          con->ifrotate[i]) *
+                                                                                                                                        propotion);
+    cv::Point pt4(rectangles[i].CENTER_X() * propotion - 0.5 * rectangles[i].get_width(con->ifrotate[i]) * propotion, rectangles[i].CENTER_Y() *
+                                                                                                                      propotion - 0.5 *
+                                                                                                                                  rectangles[i].get_height(
+                                                                                                                                          con->ifrotate[i]) *
+                                                                                                                                        propotion);
+
+    cv::line(picture, pt1, pt2, cv::Scalar(0, 0, 0));
+    cv::line(picture, pt2, pt3, cv::Scalar(0, 0, 0));
+    cv::line(picture, pt3, pt4, cv::Scalar(0, 0, 0));
+    cv::line(picture, pt4, pt1, cv::Scalar(0, 0, 0));
+//		std::cout << rectangles[i].CENTER_X() << " " << rectangles[i].CENTER_Y()<<" ";
+//		std::cout << rectangles[i].get_width(con->ifrotate[i]) << " " << rectangles[i].get_height(con->ifrotate[i]) << std::endl;
+  }
+
+  cv::namedWindow("Corner Block List");
+  imshow("Corner Block List", picture);
+  cv::waitKey(0);
+//	std::cout << std::endl;
+//  Visualizer visualizer(1000, 1000);
+//  visualizer.show(rectangles);
 }
 
 void CornerBlockList::optimize() {
-  double temp = ini_temp;
-  double now = assess(con);
-  while (temp > goal_temp) {
+  double temp = INI_TEMP;
+  double now = evaluate(con);
+  int exit_req = 0;
+  double every = START_NUM;
+  while (temp > GOAL_TEMP) {
+    int k = 0;
     for (int i = 1;i <= every;i++) {
-      Content* tmp = RandomChange(con);
-      double next = assess(tmp);
-      if ((next>0)&&((next < now)||((rand()%1000)/1000 < exp(-dy/temp)))) {
-        delete con;
+      State * tmp = RandomChange(con);
+      double next = evaluate(tmp);
+	  double p = (rand()%10000)/10000.0;
+      if ((next>0)&&((next < now)||((now < next)&&(p < exp(-(next-now)/now/temp*5000))))) {
+        //std::cout << p << " " << exp(-(next-now)/now/temp*5000) << " " << now << "->" << next << std::endl;
+		delete con;
         con = tmp;
+		now = next;
+		exit_req = 0;
       } else {
+		exit_req++;
         delete tmp;
+		if (exit_req > EXIT_NUM)
+		  return;
       }
     }
-	temp *= dec;
+	temp *= DEC;
+    std::cout << temp << std::endl;
+	every *= INC;
   }
 }
 
-bool CornerBlockList::build(const Content* con) {
+bool CornerBlockList::build(const State * con) {
   HStack.clear();
   VStack.clear();
   nd_list.clear();
@@ -114,17 +169,17 @@ bool CornerBlockList::build(const Content* con) {
   N = new Node();
   
   for (int i = 0;i < block_num;i++) {
-    rectangles[i].GET_V()->SetLen(rectangles[i].GET_HEIGHT(con->ifrotate[i]));
-    rectangles[i].GET_H()->SetLen(rectangles[i].GET_WIDTH(con->ifrotate[i]));
+    rectangles[i].get_v()->SetLen(rectangles[i].get_height(con->ifrotate[i]));
+    rectangles[i].get_h()->SetLen(rectangles[i].get_width(con->ifrotate[i]));
   }
   
-  Edge* e = rectangles[con->block_ids[0]].GET_V();
+  Edge* e = rectangles[con->block_ids[0]].get_v();
   e -> SetS(S);
   e -> SetT(N);
   S -> Add(e);
   N->Go_in++;
   
-  e = rectangles[con->block_ids[0]].GET_H();
+  e = rectangles[con->block_ids[0]].get_h();
   e -> SetS(W);
   e -> SetT(E);
   W -> Add(e);
@@ -148,9 +203,9 @@ bool CornerBlockList::build(const Content* con) {
         return false;  
     
       //build H Graph
-      Node* s1 = (rectangles[VStack[VStack.size()-num]].GET_H())->GET_S();
+      Node* s1 = (rectangles[VStack[VStack.size() - num]].get_h())->GET_S();
       
-      Edge* e = rectangles[now].GET_H();
+      Edge* e = rectangles[now].get_h();
       e->SetS(s1);
       e->SetT(E);
       s1->Add(e);
@@ -161,9 +216,9 @@ bool CornerBlockList::build(const Content* con) {
 	  nd_list.push_back(nod);
 
       for (int j = 1;j <= num;j++) 
-        (rectangles[VStack[VStack.size()-j]].GET_V()) -> SetT(nod);
+        (rectangles[VStack[VStack.size() - j]].get_v()) -> SetT(nod);
       nod->Go_in = num;
-      e = rectangles[now].GET_V();  
+      e = rectangles[now].get_v();
       e->SetS(nod);
       e->SetT(N);
       nod->Add(e);
@@ -180,9 +235,9 @@ bool CornerBlockList::build(const Content* con) {
         return false; 
         
       //build V Graph
-      Node* s1 = (rectangles[HStack[HStack.size()-num]].GET_V())->GET_S();
+      Node* s1 = (rectangles[HStack[HStack.size() - num]].get_v())->GET_S();
       
-      Edge* e = rectangles[now].GET_V();
+      Edge* e = rectangles[now].get_v();
       e->SetS(s1);
       e->SetT(N);
       s1->Add(e);
@@ -193,8 +248,8 @@ bool CornerBlockList::build(const Content* con) {
 	  nd_list.push_back(nod);
 
       for (int j = 1;j <= num;j++) 
-        (rectangles[HStack[HStack.size()-j]].GET_H()) -> SetT(nod);
-      e = rectangles[now].GET_H();  
+        (rectangles[HStack[HStack.size() - j]].get_h()) -> SetT(nod);
+      e = rectangles[now].get_h();
       e->SetS(nod);
       e->SetT(E);
       nod->Add(e);
@@ -235,7 +290,7 @@ void CornerBlockList::cal_longest(Node* start) {
     for (int j = 0;j < st->edges.size();j++) {
       Node* ed = (st->edges[j])->GET_T();
       double l = (st->edges[j])->GET_LEN();
-      ed->dis = (ed->dis>(st->dis+l)?ed->dis:(st->dis+l));
+      ed->dis = std::max(ed->dis,(st->dis+l));
     }
   }
 }
@@ -248,7 +303,7 @@ void CornerBlockList::kill() {
   delete W;
   delete E;
 }
-double CornerBlockList::assess(const Content* c) {
+double CornerBlockList::evaluate(const State *c) {
   bool q = build(c);
   //Check
   double ret = -1;
@@ -259,43 +314,51 @@ double CornerBlockList::assess(const Content* c) {
     double wire = 0;
     for (int i = 0;i < pair_num;i++) {
       //Horizon wire
-      double x1 = (rectangles[pairs[i].first].GET_H()->GET_S())->dis+rectangles[pairs[i].first].GET_WIDTH(c->ifrotate[pairs[i].first])/2;
-      double y1 = (rectangles[pairs[i].first].GET_H()->GET_T())->dis-rectangles[pairs[i].first].GET_WIDTH(c->ifrotate[pairs[i].first])/2;
-      double x2 = (rectangles[pairs[i].second].GET_H()->GET_S())->dis+rectangles[pairs[i].second].GET_WIDTH(c->ifrotate[pairs[i].second])/2;
-      double y2 = (rectangles[pairs[i].second].GET_H()->GET_T())->dis-rectangles[pairs[i].second].GET_WIDTH(c->ifrotate[pairs[i].second])/2;   
+      double x1 = (rectangles[pairs[i].first].get_h()->GET_S())->dis+
+                  rectangles[pairs[i].first].get_width(c->ifrotate[pairs[i].first])/2;
+      double y1 = (rectangles[pairs[i].first].get_h()->GET_T())->dis-
+                  rectangles[pairs[i].first].get_width(c->ifrotate[pairs[i].first])/2;
+      double x2 = (rectangles[pairs[i].second].get_h()->GET_S())->dis+
+                  rectangles[pairs[i].second].get_width(c->ifrotate[pairs[i].second])/2;
+      double y2 = (rectangles[pairs[i].second].get_h()->GET_T())->dis-
+                  rectangles[pairs[i].second].get_width(c->ifrotate[pairs[i].second])/2;
       if (x2 > y1) {
         wire += (x2 - y1);
-        rectangles[pairs[i].first].SET_X(y1);
-        rectangles[pairs[i].second].SET_X(x2);
+        rectangles[pairs[i].first].set_x(y1);
+        rectangles[pairs[i].second].set_x(x2);
       }
       else
       if (x1 > y2) {
         wire += (x1 - y2);
-        rectangles[pairs[i].first].SET_X(x1);
-        rectangles[pairs[i].second].SET_X(y2);
+        rectangles[pairs[i].first].set_x(x1);
+        rectangles[pairs[i].second].set_x(y2);
       } else {
-        rectangles[pairs[i].first].SET_X((x1>x2?x1:x2));
-        rectangles[pairs[i].second].SET_X((x1>x2?x1:x2));
+        rectangles[pairs[i].first].set_x((x1 > x2 ? x1 : x2));
+        rectangles[pairs[i].second].set_x((x1 > x2 ? x1 : x2));
       }
     
       //Vertical wire
-      x1 = (rectangles[pairs[i].first].GET_V()->GET_S())->dis+rectangles[pairs[i].first].GET_HEIGHT(c->ifrotate[pairs[i].first])/2;
-      y1 = (rectangles[pairs[i].first].GET_V()->GET_T())->dis-rectangles[pairs[i].first].GET_HEIGHT(c->ifrotate[pairs[i].first])/2;
-      x2 = (rectangles[pairs[i].second].GET_V()->GET_S())->dis+rectangles[pairs[i].second].GET_HEIGHT(c->ifrotate[pairs[i].second])/2;
-      y2 = (rectangles[pairs[i].second].GET_V()->GET_T())->dis-rectangles[pairs[i].second].GET_HEIGHT(c->ifrotate[pairs[i].second])/2;   
+      x1 = (rectangles[pairs[i].first].get_v()->GET_S())->dis+
+           rectangles[pairs[i].first].get_height(c->ifrotate[pairs[i].first])/2;
+      y1 = (rectangles[pairs[i].first].get_v()->GET_T())->dis-
+           rectangles[pairs[i].first].get_height(c->ifrotate[pairs[i].first])/2;
+      x2 = (rectangles[pairs[i].second].get_v()->GET_S())->dis+
+           rectangles[pairs[i].second].get_height(c->ifrotate[pairs[i].second])/2;
+      y2 = (rectangles[pairs[i].second].get_v()->GET_T())->dis-
+           rectangles[pairs[i].second].get_height(c->ifrotate[pairs[i].second])/2;
       if (x2 > y1) {
         wire += (x2 - y1);
-        rectangles[pairs[i].first].SET_Y(y1);
-        rectangles[pairs[i].second].SET_Y(x2);
+        rectangles[pairs[i].first].set_y(y1);
+        rectangles[pairs[i].second].set_y(x2);
       }
       else
       if (x1 > y2) {
         wire += (x1 - y2);
-        rectangles[pairs[i].first].SET_Y(x1);
-        rectangles[pairs[i].second].SET_Y(y2);
+        rectangles[pairs[i].first].set_y(x1);
+        rectangles[pairs[i].second].set_y(y2);
       } else {
-        rectangles[pairs[i].first].SET_Y((x1>x2?x1:x2));
-        rectangles[pairs[i].second].SET_Y((x1>x2?x1:x2));
+        rectangles[pairs[i].first].set_y((x1 > x2 ? x1 : x2));
+        rectangles[pairs[i].second].set_y((x1 > x2 ? x1 : x2));
       }
     }
     ret = PARAMETER * area + (1 - PARAMETER) * wire;
@@ -304,8 +367,8 @@ double CornerBlockList::assess(const Content* c) {
   return ret;
 }
 
-Content* CornerBlockList::RandomChange(const Content* c) {
-  Content* ret = new Content(c);
+State * CornerBlockList::RandomChange(const State * c) {
+  State * ret = new State(c);
   int x = std::rand() % 4;
   if (x == 0) {
     int R1 = std::rand() % block_num;
