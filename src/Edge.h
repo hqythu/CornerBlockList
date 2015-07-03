@@ -10,13 +10,13 @@ class Edge {
     Node* t;
   public:
     Edge() {}
-    Edge(double len):s(NULL),t(NULL),length(len) {}
-    void SetLen(double x) { length = x; }
-    void SetS(Node *x) { s = x; }
-    void SetT(Node *x) { t = x;}
-    Node* GET_S() { return s; }
-    Node* GET_T() { return t; }
-    double GET_LEN() { return length; }
+    Edge(double len):s(nullptr),t(nullptr),length(len) {}
+    void set_len(double x) { length = x; }
+    void set_s(Node *x) { s = x; }
+    void set_t(Node *x) { t = x;}
+    Node* get_s() const { return s; }
+    Node* get_t() const { return t; }
+    double get_len() const { return length; }
 };
 
-#endif
+#endif // EDGE_H

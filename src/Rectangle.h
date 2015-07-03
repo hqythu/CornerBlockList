@@ -21,12 +21,12 @@ class Rectangle {
       V_edge = new Edge(width);
       H_edge = new Edge(height);
     }
-    double CENTER_X() { return center_x; }
-    double CENTER_Y() { return center_y; }  
-    double get_width(bool s) { return (s?height:width); }
-    double get_height(bool s) { return (s?width:height); }
-    Edge*get_v() { return V_edge; }
-    Edge*get_h() { return H_edge;  }
+    double get_center_x() const { return center_x; }
+    double get_center_y() const { return center_y; }
+    double get_width(bool s) const { return (s?height:width); }
+    double get_height(bool s) const { return (s?width:height); }
+    Edge* get_v() const { return V_edge; }
+    Edge* get_h() const { return H_edge;  }
     void set_x(double x) { center_x = x; }
     void set_y(double y) { center_y = y; }
 };

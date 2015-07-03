@@ -27,7 +27,6 @@ const int SCREEN_WIDTH = 500;
 const double PARAMETER = 1;
 const double INI_TEMP = 1000;
 const double GOAL_TEMP = 10;
-const int EXIT_NUM = RECTANGLE_NUM * 150;
 const int START_NUM = RECTANGLE_NUM * 2;
 const double DEC = 0.95;
 const double INC = 1.05;

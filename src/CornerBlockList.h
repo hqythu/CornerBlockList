@@ -15,7 +15,7 @@
 
 class CornerBlockList {
     std::vector<Rectangle> rectangles;
-    State* con;
+    State* state;
     // Two stacks used in show()
     std::vector<int> HStack;
     std::vector<int> VStack;

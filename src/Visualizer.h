@@ -6,16 +6,12 @@
 #define CORNERBLOCKLIST_VISUALIZER_H
 
 #include "Rectangle.h"
+#include "CornerBlockList.h"
 
 
 class Visualizer {
-private:
-    double height, width;
-    double center_x, center_y;
 public:
-    Visualizer(double h, double w) : height(h), width(w) { }
-
-    void show(const std::vector<Rectangle> &rects);
+    void show(const std::vector<Rectangle>& rectangles, State* state) const;
 };
 
 
