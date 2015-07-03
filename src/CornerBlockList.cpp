@@ -83,12 +83,6 @@ void CornerBlockList::show() {
   evaluate(state);
   Visualizer v;
   v.show(rectangles, state);
-//		std::cout << rectangles[i].get_center_x() << " " << rectangles[i].get_center_y()<<" ";
-//		std::cout << rectangles[i].get_width(con->ifrotate[i]) << " " << rectangles[i].get_height(con->ifrotate[i]) << std::endl;
-
-//	std::cout << std::endl;
-//  Visualizer visualizer(1000, 1000);
-//  visualizer.show(rectangles);
 }
 
 void CornerBlockList::optimize() {
